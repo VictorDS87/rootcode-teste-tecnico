@@ -31,3 +31,15 @@ subtotal * PORCENTUAL_ESPORTES_AVENTURA
 subtotal + BAGAGEM * ((data final - data de inicio) + 1)
 
 - Criei uma rota web pra testar o valor, vou subir ela junto apenas para manter registrado, mas irei remover no proximo commit
+
+# Testes unitarios
+- Vou desenvolver os testes propostos no PDF, sendo 5 no total:
+  - 1  Testar casos onde o período da viajem é menor que 5 dias. O intuito desse teste é validar se mesmo em casos onde a viajem vai durar apenas 1 dia, a cobrança está sendo feita por 5 dias
+  - 2  Validar se em casos onde o viajante faz aniversario depois da data de inicio, consta a idade correta, que seria idade atual + 1, pois teoricamente na data de inicio da viajem ele ja teria feito aniversario
+  - 3  Testar casos onde o cliente não tem a idade minima, ou passou da idade maxima para participar do ESPORTE_AVENTURA, nesse cenario o foco é validar o aviso comunicando
+  - 4  Testar se quando tem 5 ou mais viajantes o desconto de grupo é aplicado corretamente
+  - 5  Todos os casos acima em um só
+
+- Tentei manter o uso do assertSame na maioria só por ser algo mais direto, com exceção de quando o retorno era do calculo total, nesse caso usei o assertEquals, pra validar se o tipo é o mesmo, além disso em um caso usei o assertEqualsCanonicalizing para comparar os adicionais esperados vs oq retornou, pois com ele não preciso me preocupar com a ordem que veio.
+- Optei por usar o #[Test] ao invés de colocar o nome "test" na função
+- Fiz os calculos esperados via Calculadora para validar o resultado, como eu já tinha validado os retornos antes de criar os teste unitarios ele passou bem de boa
