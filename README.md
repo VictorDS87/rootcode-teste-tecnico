@@ -18,3 +18,16 @@
 - O arredondamento é apenas no front end, pro backend vou sempre salvar o valor que retornar
 - E vou separar o Adicional e Destino, não vou manter nos services, estou pensando em criar um ENUM dentro do app e deixar o preço deles e a logica isolada, o motivo de criar um ENUM ao invés de um arquivo .php qualquer é só pela praticidade e como fica facil de identificar oq está sendo feito na chamada do ENUM.
 
+# Desenvolvendo o service principal
+- Analisando melhor o PDF entendi que não é um problema arredondar, apenas não posso usar valores arredondados pro valor da soma total, então alterei isso
+- Mantive a estrutura separada dentro do Service, tendo: 
+  - uma função principal chamada calculate, que é responsável por retornar o valor final.
+  - uma função auxiliar pra realizar os calculos de cada viajante individualmente.
+  - uma função auxiliar que devolve o mulplicador do viajante em questão baseado na idade.
+- A ordem do calculo eu acabei seguindo apenas oq estava no PDF. A primeira conta que faço, antes mesmo de rodar a função para calcular os viajantes é a da tarifa_zona * (data_final - data_inicial) + 1. Como o valor dela é fixo para todos os viajantes independente da idade, desconto ou qualquer outra coisa. Eu faço ela na função principal, pra não repetir ela dentro da função auxiliar infinitas vezes sem necessidade. Após isso a segunda conta que faço é o multiplicador, onde pego a idade do viajante e jogo para a função auxiliar responsável por devolver o valor do multiplicador. Dai então eu faço a multiplicação da base(que seria a tarifa * dias) * multiplicador(que vai de 0.5 até 2.0). Na sequencia eu verifico se o viajante tem algum adicional, caso tenha eu sigo o adicionando os valores, com um adendo, o ESPORTE_AVENTURA especificamente é aplicado ANTES da BAGAGEM, então a conta final ficaria assim:
+base = Tarifa * (data final - data de inicio) + 1
+subtotal = base * multiplicador 
+subtotal * PORCENTUAL_ESPORTES_AVENTURA
+subtotal + BAGAGEM * ((data final - data de inicio) + 1)
+
+- Criei uma rota web pra testar o valor, vou subir ela junto apenas para manter registrado, mas irei remover no proximo commit
