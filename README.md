@@ -51,4 +51,136 @@ subtotal + BAGAGEM * ((data final - data de inicio) + 1)
 - Apliquei um Request no Store para filtrar oq o front end pode enviar por segurança, também aprovei os ENUMs pra validar se o Destino e os Adicionais enviados estão dentro do esperado
 - Após terminar tudo encapsulei o retorno da função index com uma api resource pra deixar o Controller mais limpo, também apliquei ele no store, mas o foco foi o index
 - Foi uma decisão que tomei de última hora, mas decidi salvar o json do retorno pra rastreamento de bugs, apenas por segurança, mesmo que isso acabe adicionando um pouco mais de peso ou fique meio redundante
-- 
+- Fiz os teste na rota usando POSTMAN, tanto para a rota GET quanto para a rota POST
+
+[POST]api/quotes:
+req
+```
+{
+  "destino": "EUROPA",
+  "data_inicio": "2026-07-10",
+  "data_fim": "2026-07-30",
+  "viajantes": [
+    {
+      "nome": "Victor Donizete",
+      "data_nascimento": "1990-03-15",
+      "adicionais": ["BAGAGEM", "ESPORTES_AVENTURA"]
+    },
+    {
+      "nome": "Victor Pereira",
+      "data_nascimento": "1948-11-02",
+      "adicionais": ["ESPORTES_AVENTURA", "BAGAGEM"]
+    }
+  ]
+}
+```
+
+res
+```
+{
+    "data": {
+        "id": 3,
+        "destino": "EUROPA",
+        "data_inicio": "2026-07-10",
+        "data_fim": "2026-07-30",
+        "dias_cobrados": 21,
+        "viajantes": [
+            {
+                "nome": "Victor Donizete",
+                "idade": 36,
+                "subtotal": 640.5,
+                "adicionais_aplicados": [
+                    "ESPORTES_AVENTURA",
+                    "BAGAGEM"
+                ]
+            },
+            {
+                "nome": "Victor Pereira",
+                "idade": 77,
+                "subtotal": 987,
+                "adicionais_aplicados": [
+                    "BAGAGEM"
+                ]
+            }
+        ],
+        "avisos": [
+            "ESPORTES_AVENTURA não aplicado para Victor Pereira: fora da faixa etária permitida (18-64)."
+        ],
+        "desconto_grupo_percentual": 0,
+        "total_final": 1627.5,
+        "created_at": "2026-06-04T21:13:18+00:00"
+    }
+}
+```
+
+[GET]api/quotes:
+res
+```
+{
+    "data": [
+        {
+            "id": 3,
+            "destino": "EUROPA",
+            "data_inicio": "2026-07-10",
+            "data_fim": "2026-07-30",
+            "dias_cobrados": 21,
+            "viajantes": [
+                {
+                    "nome": "Victor Donizete",
+                    "idade": 36,
+                    "subtotal": 640.5,
+                    "adicionais_aplicados": [
+                        "ESPORTES_AVENTURA",
+                        "BAGAGEM"
+                    ]
+                },
+                {
+                    "nome": "Victor Pereira",
+                    "idade": 77,
+                    "subtotal": 987,
+                    "adicionais_aplicados": [
+                        "BAGAGEM"
+                    ]
+                }
+            ],
+            "avisos": [
+                "ESPORTES_AVENTURA não aplicado para Victor Pereira: fora da faixa etária permitida (18-64)."
+            ],
+            "desconto_grupo_percentual": 0,
+            "total_final": 1627.5,
+            "created_at": "2026-06-04T21:13:18+00:00"
+        },
+        {
+            "id": 2,
+            "destino": "EUROPA",
+            "data_inicio": "2026-07-10",
+            "data_fim": "2026-07-30",
+            "dias_cobrados": 21,
+            "viajantes": [
+                {
+                    "nome": "Ana",
+                    "idade": 36,
+                    "subtotal": 640.5,
+                    "adicionais_aplicados": [
+                        "ESPORTES_AVENTURA",
+                        "BAGAGEM"
+                    ]
+                },
+                {
+                    "nome": "João",
+                    "idade": 77,
+                    "subtotal": 987,
+                    "adicionais_aplicados": [
+                        "BAGAGEM"
+                    ]
+                }
+            ],
+            "avisos": [
+                "ESPORTES_AVENTURA não aplicado para João: fora da faixa etária permitida (18-64)."
+            ],
+            "desconto_grupo_percentual": 0,
+            "total_final": 1627.5,
+            "created_at": "2026-06-04T20:28:30+00:00"
+        },
+        ...
+```
