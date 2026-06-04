@@ -43,3 +43,12 @@ subtotal + BAGAGEM * ((data final - data de inicio) + 1)
 - Tentei manter o uso do assertSame na maioria só por ser algo mais direto, com exceção de quando o retorno era do calculo total, nesse caso usei o assertEquals, pra validar se o tipo é o mesmo, além disso em um caso usei o assertEqualsCanonicalizing para comparar os adicionais esperados vs oq retornou, pois com ele não preciso me preocupar com a ordem que veio.
 - Optei por usar o #[Test] ao invés de colocar o nome "test" na função
 - Fiz os calculos esperados via Calculadora para validar o resultado, como eu já tinha validado os retornos antes de criar os teste unitarios ele passou bem de boa
+
+# Controllers, Form request, Modal e Migration
+- Iniciei criando o o model + migration via linha de comando, usei os dados que eu retorno hoje do service + destino, data_inicio e data_fim. Que já recebo antes do service e não preciso retornar
+- Do front end pretendo receber apenas os dados imutaveis, que são destino, data_inicio, data_fim e as informações dos viajantes, qualquer logica vou manter dentro do backend 
+- Criei o Cntroller do Quote dentro de Controllers/api por uma questão de crescimento, e acredito ser o correto a se fazer nas boas praticas, esse Controller especifico não retorna nenhum blade, apenas JSON, além disso em um futuro poderia ser usado por outros sistemas, então acho bom essa separação, mesmo que simples ali
+- Apliquei um Request no Store para filtrar oq o front end pode enviar por segurança, também aprovei os ENUMs pra validar se o Destino e os Adicionais enviados estão dentro do esperado
+- Após terminar tudo encapsulei o retorno da função index com uma api resource pra deixar o Controller mais limpo, também apliquei ele no store, mas o foco foi o index
+- Foi uma decisão que tomei de última hora, mas decidi salvar o json do retorno pra rastreamento de bugs, apenas por segurança, mesmo que isso acabe adicionando um pouco mais de peso ou fique meio redundante
+- 
