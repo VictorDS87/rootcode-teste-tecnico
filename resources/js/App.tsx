@@ -1,3 +1,7 @@
+import { QuoteForm } from './components/QuoteForm';
+import { QuoteResult } from './components/QuoteResult';
+import { SavedQuotesList } from './components/SavedQuotesList';
+
 export default function App() {
     return (
         <div className="min-h-screen bg-slate-100 py-10">
@@ -10,6 +14,14 @@ export default function App() {
                         Informe os dados da viagem e dos viajantes para obter a cotação detalhada.
                     </p>
                 </header>
+
+                <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+                    <QuoteForm />
+                </div>
+
+                <QuoteResult />
+
+                <SavedQuotesList />
             </div>
         </div>
     );
