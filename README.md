@@ -1,4 +1,12 @@
+# Como rodar o projeto
 
+1 - Clone o projeto
+2 - rodar o comando para criar uma copia do .env.exemple com o nome .env e gera a a APP_KEY `cp .env.example .env`
+3 - suba os container `docker compose up -d`
+4 - baixe as dependencias do php `docker compose exec app composer install`
+5 - Gere a chave do APP_KEY `docker compose exec app php artisan key:generate`
+5 - Rode as migrates  `docker compose exec app php artisan migrate`
+6 - Acesse o localhost:8000
 
 # Decisões e premissas
 
