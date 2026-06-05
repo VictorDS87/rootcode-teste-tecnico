@@ -1,3 +1,5 @@
+
+
 # Decisões e premissas
 
 # Primeiro contato
@@ -184,3 +186,15 @@ res
         },
         ...
 ```
+
+# Views com React, typescript e tailwind
+
+- Até agora eu não tinha mexido no react da aplicação, só tinha deixado ele previamente ambientado, o processo aqui é relativamente simples, provavelmente a parte que vai me demandar mais tempo vai ser criar o Store com zustand.
+- Adicionei o Vite como um container único dentro do docker, pra ele ter acesso ao sistema, e também pra não ficar precisando rodar npm run dev toda hora.
+- Comecei definindo a tipagem que usaria no front end, completamente baseado no que espero receber no backend, e pensando em um cenario onde eu vou ter o formulario principal para novos usuarios, que vai receber as informações da rota, e vai voltar um array de viajantes. Um campo que vai receber o retorno do controller com o preço total, desconto, avisos etc. Por fim um campo que vai receber todas as informações da viagem para ser exibido em uma lista
+- Após criar a tipagem criei um arquivo pra ficar responsavel pelas chamadas a API, que nesse caso é só da quote, mas ele ficou responsavel tanto pelo GET quanto pelo POST
+- Criei o contexto global com o zustand e pra jogar quase toda logica dentro dele pra evitar de manter o arquivo tsx com muita logica
+- Comecei a criar os componentes, aqui eu usei IA pra criar boa parte da estrutura e estilo dos componentes que eram mais previsiveis.
+- Joguei toda logica feita pra dentro do Zustand e comecei a passar ela via contexto para os componentes
+- Com isso o projeto está 100% feito
+
