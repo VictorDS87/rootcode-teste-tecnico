@@ -38,6 +38,55 @@ class QuotePricingServiceTest extends TestCase
     $this->assertSame(5, $result['dias_cobrados']);
     $this->assertEquals(50.00, $result['viajantes'][0]['subtotal']);
   }
+  
+  #[Test]
+  public function adicional_pet_viagem_nacional(): void
+  {
+    $payload = [
+      'destino' => 'NACIONAL',
+      'data_inicio' => '2026-06-01',
+      'data_fim' => '2026-06-01',
+      'viajantes' => [
+        [
+          'nome' => 'Maria',
+          'data_nascimento' => '1990-01-01',
+          'adicionais' => ['PET']
+        ],
+      ]
+    ];
+
+    $result = $this->service->calculate($payload);
+    
+    $this->assertSame(5, $result['dias_cobrados']);
+    $this->assertEquals(130.00, $result['viajantes'][0]['subtotal']);
+    $this->assertEquals(130.00, $result['total_final']);
+  }
+
+  #[Test]
+  public function adicional_pet_viagem_internacional(): void
+  {
+    $payload = [
+      'destino' => 'EUROPA',
+      'data_inicio' => '2026-06-01',
+      'data_fim' => '2026-06-01',
+      'viajantes' => [
+        [
+          'nome' => 'Maria',
+          'data_nascimento' => '1990-01-01',
+          'adicionais' => ['PET']
+        ],
+      ]
+    ];
+
+    $result = $this->service->calculate($payload);
+    
+    $this->assertSame(5, $result['dias_cobrados']);
+    $this->assertEquals(110.00, $result['viajantes'][0]['subtotal']);
+    $this->assertEquals(110.00, $result['total_final']);
+
+    $this->assertCount(1, $result['avisos']);
+    $this->assertStringContainsString('PET não aplicado para Maria', $result['avisos'][0]);
+  }
 
   #[Test]
   public function age_is_calculated_at_trip_start_date(): void
