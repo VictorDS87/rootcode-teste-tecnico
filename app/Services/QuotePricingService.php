@@ -9,8 +9,8 @@ use Carbon\Carbon;
 class QuotePricingService
 {
   private const MIN_DIAS = 5;
-  private const DESCONTO_GRUPO_MIN_VIAJANTES = 5;
-  private const DESCONTO_GRUPO_PERCENTUAL = 0.10;    
+  private const DESCONTO_GRUPO_MIN_VIAJANTES = 8;
+  private const DESCONTO_GRUPO_PERCENTUAL = 0.15;    
 
   public function calculate(array $data): array
   {
@@ -36,7 +36,8 @@ class QuotePricingService
         $dataInicio,
         $diasCobrados,
         $tarifa,
-        $avisos
+        $avisos,
+        $destino
       );
 
       $viajantesResult[] = $result['traveler'];
@@ -69,7 +70,8 @@ class QuotePricingService
     Carbon $dataInicio,
     int $diasCobrados,
     float $tarifa,
-    array &$avisos
+    array &$avisos,
+    Destino $destino
   ): array {
     $idade = (int) Carbon::parse($viajante['data_nascimento'])->diffInYears($dataInicio);
     $multiplicador = $this->getAgeMultiplier($idade);
@@ -83,7 +85,8 @@ class QuotePricingService
       $idade, 
       $subtotal, 
       $diasCobrados, 
-      $viajante['nome']
+      $viajante['nome'], 
+      $destino
     );
 
     $subtotal = $resultAdicionais['subtotal'];
@@ -106,12 +109,14 @@ class QuotePricingService
     float $subtotal,
     int $diasCobrados,
     string $nomeViajante,
+    Destino $destino
   ): array {
     $aplicados = [];
     $avisosLocal = [];
 
     $temEsportes = in_array(Adicional::ESPORTES_AVENTURA->value, $solicitados, true);
     $temBagagem = in_array(Adicional::BAGAGEM->value, $solicitados, true);
+    $temPet = in_array(Adicional::PET->value, $solicitados, true);
 
     if ($temEsportes) {
       if ($idade >= 18 && $idade <= 64) {
@@ -119,6 +124,15 @@ class QuotePricingService
         $aplicados[] = Adicional::ESPORTES_AVENTURA->value;
       } else {
         $avisosLocal[] = "ESPORTES_AVENTURA não aplicado para {$nomeViajante}: fora da faixa etária permitida (18-64).";
+      }
+    }
+
+    if ($temPet) {
+      if ($destino === Destino::NACIONAL) {
+        $subtotal += Adicional::PET->calcularAcrescimo($subtotal, $diasCobrados);
+        $aplicados[] = Adicional::PET->value;
+      } else {
+        $avisosLocal[] = "PET não aplicado para {$nomeViajante}: adicional disponível apenas para destino NACIONAL.";
       }
     }
 
